@@ -13,13 +13,19 @@ export default function LoginPage() {
 
   async function checkEmailAllowed(emailToCheck) {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('allowed_emails')
         .select('email')
         .eq('email', emailToCheck)
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        console.error('Email check error:', error);
+        return false;
+      }
       return !!data;
-    } catch {
+    } catch (err) {
+      console.error('Email check exception:', err);
       return false;
     }
   }
