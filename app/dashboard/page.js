@@ -46,6 +46,7 @@ export default function Dashboard() {
       else setUser(session.user);
     });
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleLogout() {
@@ -115,6 +116,7 @@ export default function Dashboard() {
 
         <div className={`tab-panel${activeTab === 'input' ? ' active' : ''}`}>
           <TabInput
+            key={editRecord?.id ?? 'new'}
             user={user}
             records={records}
             editRecord={editRecord}

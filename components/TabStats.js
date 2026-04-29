@@ -43,6 +43,7 @@ export default function TabStats({ onToast }) {
   const [stats, setStats] = useState(null);
   const [rows, setRows] = useState([]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchStats(range); }, []);
 
   async function fetchStats(r) {

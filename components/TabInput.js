@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원'];
@@ -15,29 +15,19 @@ const emptyForm = () => ({
 });
 
 export default function TabInput({ user, records, editRecord, onClearEdit, onSaved, onToast }) {
-  const [form, setForm] = useState(emptyForm());
-  const [agents, setAgents] = useState([]);
+  const [form, setForm] = useState(() => editRecord ? {
+    date: editRecord.date || '', client: editRecord.client || '', media: editRecord.media || '',
+    agencyRate: editRecord.agencyRate || '', newtype: editRecord.newtype || '', category: editRecord.category || '',
+    size: editRecord.size || '', page: editRecord.page || '',
+    supply: editRecord.supply || '', vat: editRecord.vat || '', total: editRecord.total || '',
+    manager: editRecord.manager || '', note: editRecord.note || '',
+  } : emptyForm());
+  const [agents, setAgents] = useState(() => editRecord?.agents ? [...editRecord.agents] : []);
   const [vatModified, setVatModified] = useState(false);
   const [totalModified, setTotalModified] = useState(false);
   const [agentForm, setAgentForm] = useState({ name: '', amount: '', rate: '' });
   const [saving, setSaving] = useState(false);
   const isEdit = editRecord != null;
-
-  useEffect(() => {
-    if (editRecord) {
-      const r = editRecord;
-      setForm({
-        date: r.date || '', client: r.client || '', media: r.media || '',
-        agencyRate: r.agencyRate || '', newtype: r.newtype || '', category: r.category || '',
-        size: r.size || '', page: r.page || '',
-        supply: r.supply || '', vat: r.vat || '', total: r.total || '',
-        manager: r.manager || '', note: r.note || '',
-      });
-      setAgents(r.agents ? [...r.agents] : []);
-      setVatModified(false);
-      setTotalModified(false);
-    }
-  }, [editRecord]);
 
   function setField(key, val) {
     setForm(f => ({ ...f, [key]: val }));
