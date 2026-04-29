@@ -197,11 +197,11 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
           </div>
           <div className="form-group">
             <label className="form-label">광고주<span className="req">*</span></label>
-            <input type="text" value={form.client} onChange={e => setField('client', e.target.value)} placeholder="예: 삼성전자" autoComplete="off" />
+            <input type="text" value={form.client} onChange={e => setField('client', e.target.value)} autoComplete="off" />
           </div>
           <div className="form-group">
             <label className="form-label">대행사<span className="req">*</span></label>
-            <input type="text" value={form.media} onChange={e => setField('media', e.target.value)} placeholder="예: 제일기획" autoComplete="off" />
+            <input type="text" value={form.media} onChange={e => setField('media', e.target.value)} autoComplete="off" />
           </div>
           <div className="form-group">
             <label className="form-label">대행료</label>
@@ -250,11 +250,11 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
           </div>
           <div className="form-group">
             <label className="form-label">광고 사이즈</label>
-            <input type="text" value={form.size} onChange={e => setField('size', e.target.value)} placeholder="예: 5단 15cm, 30초" autoComplete="off" />
+            <input type="text" value={form.size} onChange={e => setField('size', e.target.value)} autoComplete="off" />
           </div>
           <div className="form-group">
             <label className="form-label">게재면</label>
-            <input type="text" value={form.page} onChange={e => setField('page', e.target.value)} placeholder="예: 1, 사회면, 전면" autoComplete="off" />
+            <input type="text" value={form.page} onChange={e => setField('page', e.target.value)} autoComplete="off" />
           </div>
         </div>
 
@@ -360,13 +360,16 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
           <div className="form-group">
             <label className="form-label">인정금액</label>
             <input type="number" value={agentForm.amount} onChange={e => setAgentForm(f => ({...f, amount: e.target.value}))} placeholder="0" />
-            <div className="incentive-preview">{incentivePreview}</div>
           </div>
           <div className="form-group">
             <label className="form-label">인센티브율 (%)</label>
             <input type="number" value={agentForm.rate} onChange={e => setAgentForm(f => ({...f, rate: e.target.value}))} placeholder="0" step="0.1" />
+            <div className="incentive-preview">{incentivePreview}</div>
           </div>
-          <button className="btn sm" onClick={addAgent}>+ 추가</button>
+          <div className="form-group agent-add-cell">
+            <label className="form-label" aria-hidden="true">&nbsp;</label>
+            <button className="btn sm" onClick={addAgent}>+ 추가</button>
+          </div>
         </div>
       </div>
 
