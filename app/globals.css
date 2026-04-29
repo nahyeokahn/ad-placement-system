@@ -1507,6 +1507,17 @@ input.invalid {
 .login-btn:hover { background: var(--accent-dark); }
 .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .login-err { color: var(--danger); font-size: 12px; margin-top: 10px; text-align: center; min-height: 18px; }
+.login-msg { color: var(--info); font-size: 12px; margin-top: 10px; text-align: center; min-height: 18px; }
+.login-success-msg {
+  background: var(--success-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 20px 0;
+  text-align: center;
+  color: var(--text);
+}
+.login-success-msg p { margin: 0; font-size: 14px; }
 
 #app-loading {
   display: flex; position: fixed; inset: 0;
