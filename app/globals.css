@@ -375,7 +375,7 @@ input.invalid {
   margin-bottom: 12px;
   background: #fff;
 }
-.sub-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.sub-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
 .sub-table thead tr { background: var(--surface2); }
 .sub-table th {
   padding: 9px 12px;
@@ -391,6 +391,11 @@ input.invalid {
   border-bottom: 1px solid var(--border);
   color: var(--text);
 }
+.sub-table th:nth-child(1), .sub-table td:nth-child(1) { width: 30%; }
+.sub-table th:nth-child(2), .sub-table td:nth-child(2) { width: 19%; }
+.sub-table th:nth-child(3), .sub-table td:nth-child(3) { width: 19%; }
+.sub-table th:nth-child(4), .sub-table td:nth-child(4) { width: 22%; }
+.sub-table th:nth-child(5), .sub-table td:nth-child(5) { width: 10%; }
 .sub-table tr:last-child td { border-bottom: none; }
 .sub-table tbody tr:hover td { background: var(--surface2); }
 .empty-row td {
@@ -406,15 +411,16 @@ input.invalid {
 /* ── Add Agent Row ── */
 .add-agent-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr auto;
-  gap: 10px;
+  grid-template-columns: 30% 19% 19% 32%;
+  gap: 0;
   align-items: end;
-  padding: 12px 14px;
+  padding: 12px 0;
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
-.add-agent-grid .form-group { gap: 4px; }
+.add-agent-grid > .form-group { gap: 4px; padding: 0 12px; }
+.add-agent-grid > .btn { margin: 0 12px; align-self: end; }
 .incentive-preview {
   font-size: 11px;
   color: var(--accent);

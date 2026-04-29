@@ -138,7 +138,7 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
                 <th style={{width:60}}>대행료</th>
                 <th style={{width:60}}>신/추</th>
                 <th style={{width:80}}>분류</th>
-                <th style={{width:100}}>크기/시간</th>
+                <th style={{width:100}}>광고 사이즈</th>
                 <th style={{width:50}}>면</th>
                 <th style={{width:100}}>공급가액</th>
                 <th style={{width:90}}>합계</th>

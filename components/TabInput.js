@@ -244,7 +244,7 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">광고 크기 / 시간</label>
+            <label className="form-label">광고 사이즈</label>
             <input type="text" value={form.size} onChange={e => setField('size', e.target.value)} placeholder="예: 5단 15cm, 30초" autoComplete="off" />
           </div>
           <div className="form-group">

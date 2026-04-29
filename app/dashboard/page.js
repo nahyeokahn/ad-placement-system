@@ -227,7 +227,7 @@ function DetailSheet({ record: r, onClose, onEdit, onDelete, fmt, fmtDate }) {
           <Field label="대행사">{r.media || '-'}</Field>
           <Field label="신규/추가">{r.newtype || '-'}</Field>
           <Field label="분류">{r.category || '-'}</Field>
-          <Field label="크기/시간">{r.size || '-'}</Field>
+          <Field label="광고 사이즈">{r.size || '-'}</Field>
           <Field label="게재면">{r.page || '-'}</Field>
           <Field label="대행료">{r.agencyRate ? `${r.agencyRate}% (${(r.agencyFee||0).toLocaleString()}원)` : '-'}</Field>
           <Field label="담당자">{r.manager || '-'}</Field>
