@@ -11,21 +11,32 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Supabase automatically handles the token exchange in the URL
         const { data, error: authError } = await supabase.auth.getSession();
+        if (authError) throw authError;
 
-        if (authError) {
-          throw authError;
-        }
-
-        if (data?.session) {
-          // Session established, redirect to dashboard
-          router.push('/dashboard');
-        } else {
-          // No session, redirect to login
+        if (!data?.session) {
           setError('로그인 세션을 생성할 수 없습니다. 다시 시도하세요.');
           setLoading(false);
+          return;
         }
+
+        const userEmail = data.session.user?.email;
+        const { data: row, error: checkErr } = await supabase
+          .from('allowed_emails')
+          .select('status')
+          .eq('email', userEmail)
+          .maybeSingle();
+
+        if (checkErr) throw checkErr;
+
+        if (row?.status !== 'approved') {
+          await supabase.auth.signOut();
+          setError('아직 관리자 승인이 완료되지 않았습니다.');
+          setLoading(false);
+          return;
+        }
+
+        router.push('/dashboard');
       } catch (err) {
         setError('오류 발생: ' + (err.message || '알 수 없는 오류'));
         setLoading(false);
@@ -50,9 +61,7 @@ export default function AuthCallbackPage() {
             <button
               type="button"
               className="login-btn"
-              onClick={() => {
-                window.location.href = '/login';
-              }}
+              onClick={() => { window.location.href = '/login'; }}
             >
               로그인 페이지로 돌아가기
             </button>

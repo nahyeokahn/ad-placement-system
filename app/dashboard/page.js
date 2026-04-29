@@ -5,8 +5,10 @@ import { supabase, rowToRec, fmt, fmtDate } from '@/lib/supabase';
 import TabInput from '@/components/TabInput';
 import TabSearch from '@/components/TabSearch';
 import TabStats from '@/components/TabStats';
+import TabSignupRequests from '@/components/TabSignupRequests';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원','사급'];
+const ADMIN_EMAIL = 'anh0125@segye.com';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -77,6 +79,10 @@ export default function Dashboard() {
 
   const userLabel = user ? (user.user_metadata?.name || user.email || '') : '';
   const userInitial = userLabel ? userLabel.charAt(0).toUpperCase() : '?';
+  const isAdmin = user?.email === ADMIN_EMAIL;
+  const tabs = isAdmin
+    ? [['input','게재 입력'],['search','검색 / 조회'],['stats','통계'],['signups','가입 승인']]
+    : [['input','게재 입력'],['search','검색 / 조회'],['stats','통계']];
 
   if (!user) return (
     <div id="app-loading">데이터 불러오는 중…</div>
@@ -104,7 +110,7 @@ export default function Dashboard() {
 
       <div className="container">
         <div className="tab-bar" role="tablist">
-          {[['input','게재 입력'],['search','검색 / 조회'],['stats','통계']].map(([id, label]) => (
+          {tabs.map(([id, label]) => (
             <button
               key={id}
               className={`tab-btn${activeTab === id ? ' active' : ''}`}
@@ -141,6 +147,12 @@ export default function Dashboard() {
         <div className={`tab-panel${activeTab === 'stats' ? ' active' : ''}`}>
           {activeTab === 'stats' && <TabStats onToast={showToast} />}
         </div>
+
+        {isAdmin && (
+          <div className={`tab-panel${activeTab === 'signups' ? ' active' : ''}`}>
+            {activeTab === 'signups' && <TabSignupRequests onToast={showToast} />}
+          </div>
+        )}
       </div>
 
       {/* Bottom nav (mobile) */}

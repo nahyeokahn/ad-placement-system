@@ -1,72 +1,72 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [mode, setMode] = useState('form'); // form | sent | pending | requested
 
-  async function checkEmailAllowed(emailToCheck) {
-    try {
-      const { data, error } = await supabase
-        .from('allowed_emails')
-        .select('email')
-        .eq('email', emailToCheck)
-        .maybeSingle();
-
-      if (error) {
-        console.error('Email check error:', error);
-        return false;
-      }
-      return !!data;
-    } catch (err) {
-      console.error('Email check exception:', err);
-      return false;
-    }
-  }
-
-  async function handleMagicLink(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!email) {
-      setError('이메일을 입력하세요.');
-      return;
-    }
-    setLoading(true);
-    setError('');
-    setMessage('');
+    if (!email) { setError('이메일을 입력하세요.'); return; }
+    setLoading(true); setError('');
 
-    // Check if email is allowed
-    const isAllowed = await checkEmailAllowed(email);
-    if (!isAllowed) {
+    const { data: existing, error: selectErr } = await supabase
+      .from('allowed_emails')
+      .select('email, status')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (selectErr) {
       setLoading(false);
-      setError('허용되지 않은 이메일입니다. 관리자에게 문의하세요.');
+      setError('확인 중 오류: ' + selectErr.message);
       return;
     }
 
-    // Send magic link
-    const { error: err } = await supabase.auth.signInWithOtp({
+    if (!existing) {
+      const { error: insertErr } = await supabase
+        .from('allowed_emails')
+        .insert({ email, status: 'pending' });
+      setLoading(false);
+      if (insertErr) {
+        setError('가입 신청 실패: ' + insertErr.message);
+        return;
+      }
+      setMode('requested');
+      return;
+    }
+
+    if (existing.status === 'pending') {
+      setLoading(false);
+      setMode('pending');
+      return;
+    }
+
+    if (existing.status === 'rejected') {
+      setLoading(false);
+      setError('가입 신청이 거절되었습니다. 관리자에게 문의하세요.');
+      return;
+    }
+
+    const { error: otpErr } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
-
     setLoading(false);
-    if (err) {
-      setError('메일 전송 실패: ' + (err.message || '다시 시도하세요.'));
+    if (otpErr) {
+      setError('메일 전송 실패: ' + (otpErr.message || '다시 시도하세요.'));
       return;
     }
-
-    setSent(true);
-    setMessage('로그인 링크가 이메일로 전송되었습니다. 메일함을 확인하세요.');
+    setMode('sent');
   }
 
-  if (sent) {
+  function reset() {
+    setMode('form'); setEmail(''); setError('');
+  }
+
+  if (mode === 'sent') {
     return (
       <div id="login-screen" className="show">
         <div className="login-box">
@@ -78,16 +78,49 @@ export default function LoginPage() {
               이메일을 확인하고 로그인 링크를 클릭하세요.
             </p>
           </div>
-          <button
-            type="button"
-            className="login-btn"
-            onClick={() => {
-              setSent(false);
-              setEmail('');
-              setMessage('');
-            }}
-          >
+          <button type="button" className="login-btn" onClick={reset}>
             다른 이메일로 시도
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === 'requested') {
+    return (
+      <div id="login-screen" className="show">
+        <div className="login-box">
+          <div className="login-logo">광</div>
+          <div className="login-title">가입 신청 접수</div>
+          <div className="login-success-msg">
+            <p>{email}</p>
+            <p style={{ marginTop: '10px', fontSize: '14px' }}>
+              관리자 승인 후 로그인 링크를 이메일로 보내드립니다.
+            </p>
+          </div>
+          <button type="button" className="login-btn" onClick={reset}>
+            돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === 'pending') {
+    return (
+      <div id="login-screen" className="show">
+        <div className="login-box">
+          <div className="login-logo">광</div>
+          <div className="login-title">관리자 승인 대기 중</div>
+          <div className="login-success-msg">
+            <p>{email}</p>
+            <p style={{ marginTop: '10px', fontSize: '14px' }}>
+              아직 관리자 승인이 완료되지 않았습니다.<br />
+              승인이 완료되면 이메일로 로그인 링크가 발송됩니다.
+            </p>
+          </div>
+          <button type="button" className="login-btn" onClick={reset}>
+            돌아가기
           </button>
         </div>
       </div>
@@ -99,8 +132,8 @@ export default function LoginPage() {
       <div className="login-box">
         <div className="login-logo">광</div>
         <div className="login-title">광고 게재 원표</div>
-        <div className="login-sub">로그인 링크로 계속하세요</div>
-        <form onSubmit={handleMagicLink}>
+        <div className="login-sub">로그인 또는 가입 신청</div>
+        <form onSubmit={handleSubmit}>
           <div className="login-field">
             <label>이메일</label>
             <input
@@ -113,11 +146,13 @@ export default function LoginPage() {
             />
           </div>
           <button type="submit" className="login-btn" disabled={loading}>
-            {loading ? '전송 중…' : '로그인 링크 받기'}
+            {loading ? '처리 중…' : '로그인 / 가입 신청'}
           </button>
         </form>
         {error && <div className="login-err">{error}</div>}
-        {message && <div className="login-msg">{message}</div>}
+        <div className="login-msg" style={{ fontSize: 12, marginTop: 12 }}>
+          처음 사용자는 이메일 입력 후 신청하면 관리자 승인 후 로그인 가능합니다.
+        </div>
       </div>
     </div>
   );

@@ -421,6 +421,37 @@ input.invalid {
 }
 .add-agent-grid > .form-group { gap: 4px; padding: 0 12px; }
 .add-agent-grid > .agent-add-cell .btn { width: 100%; }
+
+/* ── Signup Requests Table ── */
+.signup-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #fff;
+}
+.signup-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.signup-table thead tr { background: var(--surface2); }
+.signup-table th {
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  text-align: left;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--border);
+}
+.signup-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.signup-table tr:last-child td { border-bottom: none; }
+.signup-table tbody tr:hover td { background: var(--surface2); }
+.signup-table .signup-time {
+  font-size: 12px;
+  color: var(--text2);
+  font-family: 'DM Mono', monospace;
+}
 .incentive-preview {
   font-size: 11px;
   color: var(--accent);
