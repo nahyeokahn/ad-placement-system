@@ -3,6 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase, rowToRec, fmt, fmtDate } from '@/lib/supabase';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원'];
+const AGENTS = [
+  '강승우','강승훈','강은선','김건호','김동욱','김선덕','김세희','김수미',
+  '김정모','박진영','배소영','오상도','오성택','윤교근','윤선영','이강은',
+  '이영균','이천종','이현미','임성준','정성수','정재영','조성민','최현태',
+];
 
 export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onToast, managers }) {
   const [keyword, setKeyword] = useState('');
@@ -105,7 +110,7 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
               <label className="form-label">수주자</label>
               <select value={filters.agent} onChange={e => setFilter('agent', e.target.value)}>
                 <option value="">전체</option>
-                {MANAGERS.map(m => <option key={m}>{m}</option>)}
+                {AGENTS.map(m => <option key={m}>{m}</option>)}
               </select>
             </div>
           </div>
