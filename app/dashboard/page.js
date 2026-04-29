@@ -6,7 +6,7 @@ import TabInput from '@/components/TabInput';
 import TabSearch from '@/components/TabSearch';
 import TabStats from '@/components/TabStats';
 
-const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원'];
+const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원','사급'];
 
 export default function Dashboard() {
   const router = useRouter();
