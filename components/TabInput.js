@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원','사급'];
@@ -33,6 +33,12 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
   const [agentForm, setAgentForm] = useState({ name: '', amount: '', rate: '' });
   const [saving, setSaving] = useState(false);
   const isEdit = editRecord != null;
+
+  // Unique 광고주 / 대행사 values from existing records (sorted, case-insensitive dedup).
+  // Used to power native <datalist> autocomplete so newly typed values stay
+  // consistent with what's already in the DB.
+  const uniqueClients = useMemo(() => uniqueSorted(records, 'client'), [records]);
+  const uniqueMedia   = useMemo(() => uniqueSorted(records, 'media'),  [records]);
 
   function setField(key, val) {
     setForm(f => ({ ...f, [key]: val }));
@@ -197,11 +203,29 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
           </div>
           <div className="form-group">
             <label className="form-label">광고주<span className="req">*</span></label>
-            <input type="text" value={form.client} onChange={e => setField('client', e.target.value)} autoComplete="off" />
+            <input
+              type="text"
+              list="dl-clients"
+              value={form.client}
+              onChange={e => setField('client', e.target.value)}
+              autoComplete="off"
+            />
+            <datalist id="dl-clients">
+              {uniqueClients.map(v => <option key={v} value={v} />)}
+            </datalist>
           </div>
           <div className="form-group">
             <label className="form-label">대행사<span className="req">*</span></label>
-            <input type="text" value={form.media} onChange={e => setField('media', e.target.value)} autoComplete="off" />
+            <input
+              type="text"
+              list="dl-media"
+              value={form.media}
+              onChange={e => setField('media', e.target.value)}
+              autoComplete="off"
+            />
+            <datalist id="dl-media">
+              {uniqueMedia.map(v => <option key={v} value={v} />)}
+            </datalist>
           </div>
           <div className="form-group">
             <label className="form-label">대행료</label>
@@ -399,4 +423,18 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
       </button>
     </>
   );
+}
+
+// Pull a unique, sorted list of values from `records[*][key]`. Trims, drops
+// empties, and de-duplicates case-insensitively while preserving the first
+// casing seen (so the autocomplete shows the version the user actually typed).
+function uniqueSorted(records, key) {
+  const map = new Map();
+  for (const r of records || []) {
+    const v = (r?.[key] || '').trim();
+    if (!v) continue;
+    const k = v.toLowerCase();
+    if (!map.has(k)) map.set(k, v);
+  }
+  return Array.from(map.values()).sort((a, b) => a.localeCompare(b, 'ko'));
 }

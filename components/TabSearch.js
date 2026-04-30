@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase, rowToRec, fmt, fmtDate } from '@/lib/supabase';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원','사급'];
@@ -16,6 +16,22 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
   const [results, setResults] = useState(null);
   const [resultSum, setResultSum] = useState(0);
   const debounceRef = useRef(null);
+
+  // Combined unique 광고주 + 대행사 values from existing records, used as
+  // <datalist> options so the search input autocompletes against the actual
+  // DB values (prevents typo-driven misses).
+  const suggestions = useMemo(() => {
+    const map = new Map();
+    for (const r of records || []) {
+      for (const v of [r?.client, r?.media]) {
+        const t = (v || '').trim();
+        if (!t) continue;
+        const k = t.toLowerCase();
+        if (!map.has(k)) map.set(k, t);
+      }
+    }
+    return Array.from(map.values()).sort((a, b) => a.localeCompare(b, 'ko'));
+  }, [records]);
 
   const displayRows = results !== null ? results : records;
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
@@ -63,10 +79,15 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
           <div className="search-input-wrap">
             <input
               type="search"
+              list="dl-search"
               placeholder="광고주, 대행사 검색…"
               value={keyword}
               onChange={e => handleQuickSearch(e.target.value)}
+              autoComplete="off"
             />
+            <datalist id="dl-search">
+              {suggestions.map(v => <option key={v} value={v} />)}
+            </datalist>
           </div>
           <button className="filter-toggle-btn" onClick={() => setFiltersOpen(o => !o)}>
             필터
