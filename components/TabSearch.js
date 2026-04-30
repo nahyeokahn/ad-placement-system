@@ -19,6 +19,7 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [results, setResults] = useState(null);
   const [resultSum, setResultSum] = useState(0);
+  const [searching, setSearching] = useState(false);
   const debounceRef = useRef(null);
 
   // Combined unique 광고주 + 대행사 values from existing records, used as
@@ -46,18 +47,25 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
 
   async function doSearch(kw = keyword, flt = filters) {
     const kwL = kw.trim().toLowerCase();
-    let q = supabase.from('ad_placements').select('*, ad_agents(*)').order('date', { ascending: false });
+    // 수주자(agent) 필터가 있으면 ad_agents inner join으로 서버사이드에서 직접 필터.
+    // 없으면 일반 left-join. 둘 다 결과는 500건으로 캡 — 더 좁히고 싶으면 기간/키워드를 추가.
+    const selectStr = flt.agent ? '*, ad_agents!inner(*)' : '*, ad_agents(*)';
+    let q = supabase.from('ad_placements').select(selectStr)
+      .order('date', { ascending: false })
+      .limit(500);
     if (flt.from) q = q.gte('date', flt.from);
     if (flt.to) q = q.lte('date', flt.to);
     if (flt.manager) q = q.eq('manager', flt.manager);
     if (flt.newtype) q = q.eq('new_type', flt.newtype);
     if (flt.category) q = q.eq('category', flt.category);
     if (flt.agencyRate) q = q.eq('agency_rate', flt.agencyRate);
+    if (flt.agent) q = q.eq('ad_agents.agent_name', flt.agent);
     if (kwL) q = q.or(`client.ilike.%${kwL}%,media.ilike.%${kwL}%`);
+    setSearching(true);
     const { data, error } = await q;
+    setSearching(false);
     if (error) { onToast('검색 실패: ' + error.message, 'error'); return; }
-    let res = (data || []).map(rowToRec);
-    if (flt.agent) res = res.filter(r => r.agents && r.agents.some(a => a.name === flt.agent));
+    const res = (data || []).map(rowToRec);
     setResults(res);
     setResultSum(res.reduce((a, r) => a + (r.total || 0), 0));
   }
@@ -65,7 +73,8 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
   function handleQuickSearch(kw) {
     setKeyword(kw);
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => doSearch(kw, filters), 220);
+    // 350ms 디바운스 — 빠른 타이핑 중에는 마지막 1회만 서버에 도달
+    debounceRef.current = setTimeout(() => doSearch(kw, filters), 350);
   }
 
   async function resetSearch() {
@@ -147,14 +156,23 @@ export default function TabSearch({ records, onEdit, onDelete, onOpenDetail, onT
         </div>
 
         <div className="search-actions">
-          <button className="btn" onClick={resetSearch}>초기화</button>
-          <button className="btn primary" onClick={() => doSearch()}>검색</button>
+          <button className="btn" onClick={resetSearch} disabled={searching}>초기화</button>
+          <button className="btn primary" onClick={() => doSearch()} disabled={searching}>
+            {searching ? '검색 중…' : '검색'}
+          </button>
         </div>
       </div>
 
       {results !== null && (
         <div className="result-info">
-          <span><span className="result-info-count">{results.length}건</span> 조회됨</span>
+          <span>
+            <span className="result-info-count">{results.length}건</span> 조회됨
+            {results.length >= 500 && (
+              <span style={{marginLeft:8, fontSize:11, color:'var(--text3)'}}>
+                (최대 500건까지 — 더 좁히려면 기간/필터를 추가하세요)
+              </span>
+            )}
+          </span>
           {results.length > 0 && (
             <span className="result-info-sum">합계 {resultSum.toLocaleString()}원</span>
           )}

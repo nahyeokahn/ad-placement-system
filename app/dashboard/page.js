@@ -31,11 +31,14 @@ export default function Dashboard() {
   }
 
   async function loadRecords() {
+    // 첫 페인트는 최근 200건만 — 자동완성·기본 노출에 필요한 만큼.
+    // 검색 탭에서 필터/키워드를 쓰면 별도 쿼리로 18k 전체에 접근 가능.
     const { data, error } = await supabase
       .from('ad_placements')
       .select('*, ad_agents(*)')
       .order('date', { ascending: false })
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .limit(200);
     if (error) { showToast('데이터 로드 실패: ' + error.message, 'error'); return; }
     setRecords((data || []).map(rowToRec));
   }
