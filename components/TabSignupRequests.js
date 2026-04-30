@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export default function TabSignupRequests({ onToast }) {
   const [rows, setRows] = useState([]);
@@ -39,7 +40,7 @@ export default function TabSignupRequests({ onToast }) {
 
     const { error: otpErr } = await supabase.auth.signInWithOtp({
       email: row.email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: `${getSiteUrl()}/auth/callback` },
     });
     if (otpErr) {
       onToast(`승인됨, 메일 전송 실패: ${otpErr.message}`, 'error');
