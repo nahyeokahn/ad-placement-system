@@ -50,7 +50,7 @@ export default function AuthCallbackPage() {
     <div id="login-screen" className="show">
       <div className="login-box">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/segye-logo.png" alt="세계일보" className="login-logo-img" />
+        <img src="/segye-logo.svg" alt="세계일보" className="login-logo-img" />
         <div className="login-title">로그인 중…</div>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '20px' }}>

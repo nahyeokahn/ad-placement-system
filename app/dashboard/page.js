@@ -97,7 +97,7 @@ export default function Dashboard() {
         <div className="header-inner">
           <div className="header-left">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/segye-logo.png" alt="세계일보" className="header-logo-img" />
+            <img src="/segye-logo.svg" alt="세계일보" className="header-logo-img" />
             <div className="header-title-wrap">
               <div className="header-title">광고 게재 원표</div>
             </div>
