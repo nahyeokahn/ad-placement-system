@@ -96,8 +96,9 @@ export default function Dashboard() {
       <header className="header">
         <div className="header-inner">
           <div className="header-left">
-            <div className="header-logo">광</div>
+            <div className="header-logo" aria-label="세계일보">세</div>
             <div className="header-title-wrap">
+              <div className="header-brand">세계일보</div>
               <div className="header-title">광고 게재 원표</div>
               <div className="header-sub">Ad Placement Management</div>
             </div>

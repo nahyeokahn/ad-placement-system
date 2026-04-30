@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: '광고 게재 원표',
-  description: 'Ad Placement Management',
+  title: '세계일보 광고 게재 원표',
+  description: '세계일보 광고 게재 원표 — Ad Placement Management',
   other: {
     'theme-color': '#2d5a3d',
     'apple-mobile-web-app-capable': 'yes',
