@@ -3,8 +3,10 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase, rowToRec, fmt, fmtDate } from '@/lib/supabase';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원','사급'];
-// 과거 담당자 — 2024년 이전 데이터에 남아 있어 별도 그룹으로 노출.
-const LEGACY_MANAGERS = ['강용','박기창','이인자'];
+// 과거 담당자 — 2024년 이전 데이터에 남아 있어 검색 필터에서만 별도 그룹으로 노출.
+// 강용·박기창 레코드는 DB에 그대로 남아 있지만, 드롭다운 필터에는 노출하지 않음
+// (다른 조건으로 검색하면 결과 테이블에 그대로 표시됨).
+const LEGACY_MANAGERS = ['이인자'];
 const AGENTS = [
   '강승우','강승훈','강은선','김건호','김동욱','김선덕','김세희','김수미',
   '김정모','박진영','배소영','오상도','오성택','윤교근','윤선영','이강은',
