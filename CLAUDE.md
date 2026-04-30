@@ -33,7 +33,8 @@
 
 ## 상수 동기화 주의
 다음 두 상수는 **3곳에 중복**되어 있어 한 곳만 수정하면 안 됩니다:
-- `MANAGERS` (담당자) — `TabInput.js`, `TabSearch.js`, `app/dashboard/page.js`
+- `MANAGERS` (담당자, 현재) — `TabInput.js`, `TabSearch.js`, `app/dashboard/page.js`
+- `LEGACY_MANAGERS` (담당자, 과거 — 2024년 데이터용) — 동일 3파일
 - `AGENTS` (수주자) — `TabInput.js`, `TabSearch.js`
 
 ## 알려진 주의사항

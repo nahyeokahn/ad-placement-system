@@ -3,6 +3,9 @@ import { useState, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원','사급'];
+// 과거 담당자 — 2024년 이전 데이터에 남아 있어 검색·통계에서 선택 가능해야 함.
+// 신규 입력 시에도 노출하지만 별도 그룹으로 구분.
+const LEGACY_MANAGERS = ['강용','박기창','이인자'];
 const AGENTS = [
   '강승우','강승훈','강은선','김건호','김동욱','김선덕','김세희','김수미',
   '김정모','박진영','배소영','오상도','오성택','윤교근','윤선영','이강은',
@@ -240,7 +243,12 @@ export default function TabInput({ user, records, editRecord, onClearEdit, onSav
             <label className="form-label">담당자</label>
             <select value={form.manager} onChange={e => setField('manager', e.target.value)}>
               <option value="">선택</option>
-              {MANAGERS.map(m => <option key={m}>{m}</option>)}
+              <optgroup label="현재">
+                {MANAGERS.map(m => <option key={m}>{m}</option>)}
+              </optgroup>
+              <optgroup label="과거">
+                {LEGACY_MANAGERS.map(m => <option key={m}>{m}</option>)}
+              </optgroup>
             </select>
           </div>
           <div className="form-group" style={{justifyContent:'flex-end'}}>

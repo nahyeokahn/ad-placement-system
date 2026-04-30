@@ -8,6 +8,8 @@ import TabStats from '@/components/TabStats';
 import TabSignupRequests from '@/components/TabSignupRequests';
 
 const MANAGERS = ['공진건','김재호','김준영','박제선','신흥수','안나혁','양재준','이규원','사급'];
+// 과거 담당자 — 2024년 이전 데이터에 남아 있어 별도 그룹으로 노출.
+const LEGACY_MANAGERS = ['강용','박기창','이인자'];
 const ADMIN_EMAIL = 'anh0125@segye.com';
 
 export default function Dashboard() {
