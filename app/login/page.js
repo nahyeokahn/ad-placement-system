@@ -71,8 +71,7 @@ export default function LoginPage() {
     return (
       <div id="login-screen" className="show">
         <div className="login-box">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/segye-logo.svg" alt="세계일보" className="login-logo-img" />
+          <div className="login-brand-text">세계일보</div>
           <div className="login-title">로그인 링크 전송됨</div>
           <div className="login-success-msg">
             <p>{email}</p>
@@ -92,8 +91,7 @@ export default function LoginPage() {
     return (
       <div id="login-screen" className="show">
         <div className="login-box">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/segye-logo.svg" alt="세계일보" className="login-logo-img" />
+          <div className="login-brand-text">세계일보</div>
           <div className="login-title">가입 신청 접수</div>
           <div className="login-success-msg">
             <p>{email}</p>
@@ -113,8 +111,7 @@ export default function LoginPage() {
     return (
       <div id="login-screen" className="show">
         <div className="login-box">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/segye-logo.svg" alt="세계일보" className="login-logo-img" />
+          <div className="login-brand-text">세계일보</div>
           <div className="login-title">관리자 승인 대기 중</div>
           <div className="login-success-msg">
             <p>{email}</p>
@@ -134,8 +131,7 @@ export default function LoginPage() {
   return (
     <div id="login-screen" className="show">
       <div className="login-box">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/segye-logo.svg" alt="세계일보" className="login-logo-img" />
+        <div className="login-brand-text">세계일보</div>
         <div className="login-title">광고 게재 원표</div>
         <div className="login-sub">로그인 또는 가입 신청</div>
         <form onSubmit={handleSubmit}>
