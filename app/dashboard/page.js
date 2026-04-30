@@ -96,11 +96,10 @@ export default function Dashboard() {
       <header className="header">
         <div className="header-inner">
           <div className="header-left">
-            <div className="header-logo" aria-label="세계일보">세</div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/segye-logo.png" alt="세계일보" className="header-logo-img" />
             <div className="header-title-wrap">
-              <div className="header-brand">세계일보</div>
               <div className="header-title">광고 게재 원표</div>
-              <div className="header-sub">Ad Placement Management</div>
             </div>
           </div>
           <div className="header-right">

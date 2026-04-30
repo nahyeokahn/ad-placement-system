@@ -10,9 +10,9 @@
   --text: #1a1916;
   --text2: #6b6860;
   --text3: #9e9b92;
-  --accent: #2d5a3d;
-  --accent-dark: #1f4029;
-  --accent-light: #e8f0eb;
+  --accent: #1f4a5c;
+  --accent-dark: #143542;
+  --accent-light: #e6eef2;
   --accent2: #c8a85a;
   --accent2-light: #faf5e8;
   --danger: #c0392b;
@@ -69,37 +69,22 @@ body {
   width: 100%;
   height: 56px;
 }
-.header-left { display: flex; align-items: center; gap: 10px; }
-.header-logo {
-  width: 32px; height: 32px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px;
-  letter-spacing: -0.02em;
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-logo-img {
+  height: 30px;
+  width: auto;
+  display: block;
+  /* 흰 배경 위 어두운 로고를 헤더(다크 틸)에서도 보이게 반전 */
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
 }
-.header-title-wrap { display: flex; flex-direction: column; }
-.header-brand {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  opacity: 0.7;
-  line-height: 1;
-  margin-bottom: 3px;
-  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
-}
+.header-title-wrap { display: flex; flex-direction: column; justify-content: center; }
 .header-title {
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
-}
-.header-sub {
-  font-size: 10px;
-  opacity: 0.65;
-  margin-top: 2px;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.02em;
+  opacity: 0.92;
 }
 .header-right { display: flex; align-items: center; gap: 8px; }
 .header-user {
@@ -1524,23 +1509,11 @@ input.invalid {
   max-width: 380px;
   box-shadow: var(--shadow-lg);
 }
-.login-logo {
-  width: 52px; height: 52px;
-  background: var(--accent);
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; font-weight: 700; color: #fff;
-  margin: 0 auto 10px;
-}
-.login-brand {
-  text-align: center;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  color: var(--text);
-  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
-  margin-bottom: 14px;
-  text-transform: none;
+.login-logo-img {
+  display: block;
+  margin: 0 auto 22px;
+  height: 48px;
+  width: auto;
 }
 .login-title { font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 4px; }
 .login-sub   { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 28px; }

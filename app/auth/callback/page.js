@@ -49,8 +49,8 @@ export default function AuthCallbackPage() {
   return (
     <div id="login-screen" className="show">
       <div className="login-box">
-        <div className="login-logo" aria-label="세계일보">세</div>
-        <div className="login-brand">세계일보</div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/segye-logo.png" alt="세계일보" className="login-logo-img" />
         <div className="login-title">로그인 중…</div>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '20px' }}>
